@@ -64,7 +64,7 @@ QueryMaker.prototype.query = function(query, options, callback) {
 				data = JSON.parse(buffer);
 			} catch(e) { error = e; }
 
-			if (!data && !error) {
+			if (!data && !data.data && !error) {
 				error = new Error('Facebook returned a falsey value');
 			}
 			if (error) {
@@ -74,6 +74,7 @@ QueryMaker.prototype.query = function(query, options, callback) {
 			// Condenses response data
 			// Supports multi-query responses too...
 			data = data.data;
+
 			if (data.length === 1) {
 				data = data[0].fql_result_set;
 			} else {
@@ -81,6 +82,11 @@ QueryMaker.prototype.query = function(query, options, callback) {
 					newData[result.name] = result.fql_result_set;
 				});
 				data = newData;
+			}
+
+			// One last check for falsey responses
+			if (Array.isArray(data) && !data.length) {
+				return callback(new Error('Facebook returned a falsey value'));
 			}
 
 			return callback(null, data);
@@ -116,7 +122,8 @@ QueryMaker.prototype.parse = function(fqlQuery, options) {
 
 	fqlQuery = querystring.stringify({
 		q: JSON.stringify(fqlQuery)
-	}).replace(/\%20/g, '+');
+	}).replace(/\%20/g, '+')
+	  .replace(/\%5C\%22/g, '\\"');
 
 	// Append the access token if supplied
 	if (options.token) {

@@ -81,6 +81,26 @@ suite('QueryMaker', function() {
 			});
 		});
 
+		test('Handles quotes in queries OK', function(done) {
+			fql.query('SELECT name FROM page WHERE username = "coca-cola"', function(err, data) {
+				assert.ifError(err);
+
+				assert.ok(data && data[0]);
+				assert.ok(data[0].name);
+
+				done();
+			});
+		});
+
+		test('Returns an error with falsey responses', function(done) {
+
+			// This should return false as Bacardi has an age gate which prevents API access
+			fql.query('SELECT name FROM page WHERE username = "bacardi"', function(err, data) {
+				assert.ok(err instanceof Error);
+				done();
+			});
+		});
+
 		test('fda.query is equivalent to fda().query', function(done) {
 			var firstResponse;
 
@@ -101,5 +121,6 @@ suite('QueryMaker', function() {
 				});
 			});
 		});
+
 	});
 });
