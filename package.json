@@ -1,0 +1,24 @@
+{
+  "author": "Hugh Kennedy <hughskennedy@gmail.com> (http://hughskennedy.com)",
+  "name": "fql",
+  "description": "Simple Facebook FQL queries for Node",
+  "version": "0.0.2",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:hughsk/fql-node.git"
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": "node node_modules/mocha/bin/_mocha -u tdd --reporter spec --timeout 15000 --slow 3000"
+  },
+  "dependencies": {
+    "underscore": "1.3.x"
+  },
+  "devDependencies": {
+    "mocha": "1.0.x"
+  },
+  "optionalDependencies": {},
+  "engines": {
+    "node": ">=0.6"
+  }
+}

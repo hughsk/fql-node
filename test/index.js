@@ -1,0 +1,105 @@
+var fql = require('../index.js'),
+	assert = require('assert'),
+	querystring = require('querystring'),
+	_ = require('underscore');
+
+suite('QueryMaker', function() {
+	suite('#parse', function() {
+		test('Single simple query', function() {
+			var parser = new (fql.QueryMaker)(),
+				query = 'SELECT uid2 FROM friend WHERE uid1=me()';
+
+			assert.equal(
+				parser.parse(query),
+				'fql?q=%7B%22single%22%3A%22SELECT+uid2+FROM+friend+WHERE+uid1%3Dme()%22%7D'
+			);
+		});
+		test('Two simple queries', function() {
+			var parser = new (fql.QueryMaker)(),
+				query = {
+					'one': 'SELECT uid2 FROM friend WHERE uid1=me()',
+					'two': 'SELECT name FROM user WHERE uid=me()'
+				};
+
+			assert.equal(
+				parser.parse(query),
+				'fql?q=%7B%22one%22%3A%22SELECT+uid2+FROM+friend+WHERE+uid1%3Dme()%22%' +
+				'2C%22two%22%3A%22SELECT+name+FROM+user+WHERE+uid%3Dme()%22%7D'
+			);
+		});
+		test('Appends access token', function() {
+			var parser = new (fql.QueryMaker)(),
+				parsed = {},
+				query = 'SELECT';
+
+			parsed = parser.parse(query, { token: 'THISISATOKEN' });
+			parsed = querystring.parse(parsed);
+			
+			assert.ok(parsed['access_token']);
+			assert.equal(parsed['access_token'], 'THISISATOKEN');
+		});
+	});
+	suite('#query', function() {
+		test('Accesses the Facebook Platform page OK', function(done) {
+			var query;
+			
+			query = fql().query('SELECT name, fan_count FROM page WHERE page_id = 19292868552', function(err, data) {
+				assert.ifError(err);
+				assert.ok(data && data[0]);
+				assert.ok(data[0].name);
+				assert.ok(data[0].fan_count);
+				done();
+			});
+		});
+
+		test('Accesses the Coca Cola page OK', function(done) {
+			var query;
+			
+			query = fql().query('SELECT name, fan_count FROM page WHERE page_id = 40796308305', function(err, data) {
+				assert.ifError(err);
+				assert.ok(data && data[0]);
+				assert.ok(data[0].name);
+				assert.ok(data[0].fan_count);
+				done();
+			});
+		});
+
+		test('Accesses both pages in multi-query', function(done) {
+			var query;
+
+			query = fql().query({
+				facebook: 'SELECT name, fan_count FROM page WHERE page_id = 19292868552',
+				coke: 'SELECT name, fan_count FROM page WHERE page_id = 40796308305'
+			}, function(err, data) {
+				assert.ifError(err);
+				assert.ok(data);
+				assert.ok(data.coke);
+				assert.ok(data.facebook);
+				assert.ok(_(data).pluck('name'));
+				assert.ok(_(data).pluck('fan_count'));
+				done();
+			});
+		});
+
+		test('fda.query is equivalent to fda().query', function(done) {
+			var firstResponse;
+
+			fql.query('SELECT name, fan_count FROM page WHERE page_id = 19292868552', function(err, data) {
+				assert.ifError(err);
+				
+				assert.ok(data && data[0]);
+				assert.ok(data[0].name);
+				assert.ok(data[0].fan_count);
+				
+				firstResponse = data;
+
+				fql().query('SELECT name, fan_count FROM page WHERE page_id = 19292868552', function(err, data) {
+					assert.ifError(err);
+					assert.deepEqual(firstResponse, data);
+
+					done();
+				});
+			});
+		});
+	});
+});
