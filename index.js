@@ -67,6 +67,10 @@ QueryMaker.prototype.query = function(query, options, callback) {
 			if (!data && !data.data && !error) {
 				error = new Error('Facebook returned a falsey value');
 			}
+			if (data.error) {
+				// Errors supplied by Facebook
+				error = new Error(data.error.type + ': ' + data.error.message);
+			}
 			if (error) {
 				return callback(error);
 			}
