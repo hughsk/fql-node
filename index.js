@@ -38,7 +38,7 @@ QueryMaker.prototype.query = function(query, options, callback) {
 	options = options || {};
 
 	query = this.parse(query, options);
-	
+
 	(options.token ? https : http).get({
 		host: 'graph.facebook.com',
 		path: query
@@ -64,10 +64,10 @@ QueryMaker.prototype.query = function(query, options, callback) {
 				data = JSON.parse(buffer);
 			} catch(e) { error = e; }
 
-			if (!data && !data.data && !error) {
+			if (!error && !data && !data.data) {
 				error = new Error('Facebook returned a falsey value');
 			}
-			if (data.error) {
+			if (data && data.error) {
 				// Errors supplied by Facebook
 				error = new Error(data.error.type + ': ' + data.error.message);
 			}
@@ -127,7 +127,8 @@ QueryMaker.prototype.parse = function(fqlQuery, options) {
 	fqlQuery = querystring.stringify({
 		q: JSON.stringify(fqlQuery)
 	}).replace(/\%20/g, '+')
-	  .replace(/\%5C\%22/g, '\\"');
+	  .replace(/\%5C\%22/g, '\\"')
+	  .replace(/\%22/g, '"');
 
 	// Append the access token if supplied
 	if (options.token) {
