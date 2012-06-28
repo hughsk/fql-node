@@ -11,7 +11,7 @@ suite('QueryMaker', function() {
 
 			assert.equal(
 				parser.parse(query),
-				'fql?q=%7B"single"%3A"SELECT+uid2+FROM+friend+WHERE+uid1%3Dme()"%7D'
+				'/fql?q=%7B"single"%3A"SELECT+uid2+FROM+friend+WHERE+uid1%3Dme()"%7D'
 			);
 		});
 		test('Two simple queries', function() {
@@ -23,7 +23,7 @@ suite('QueryMaker', function() {
 
 			assert.equal(
 				parser.parse(query),
-				'fql?q=%7B"one"%3A"SELECT+uid2+FROM+friend+WHERE+uid1%3Dme()"%' +
+				'/fql?q=%7B"one"%3A"SELECT+uid2+FROM+friend+WHERE+uid1%3Dme()"%' +
 				'2C"two"%3A"SELECT+name+FROM+user+WHERE+uid%3Dme()"%7D'
 			);
 		});

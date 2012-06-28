@@ -135,7 +135,7 @@ QueryMaker.prototype.parse = function(fqlQuery, options) {
 		fqlQuery += '&access_token=' + options.token;
 	}
 
-	return 'fql?' + fqlQuery;
+	return '/fql?' + fqlQuery;
 };
 
 // Allows not having to call fql() to use #query or #parse.
