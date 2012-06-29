@@ -53,3 +53,8 @@ fql.query({
 	*/
 });
 ```
+
+## Contributors
+
+* [hughsk](https://github.com/hughsk)
+* [mugami-ast](https://github.com/mugami-ast)
