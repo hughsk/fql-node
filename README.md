@@ -1,3 +1,4 @@
+[![build status](https://secure.travis-ci.org/hughsk/fql-node.png)](http://travis-ci.org/hughsk/fql-node)
 # node-fql
 
 Jump into the Facebook Graph API with simpler FQL queries for Node.
