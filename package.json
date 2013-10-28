@@ -12,8 +12,7 @@
     "test": "node node_modules/mocha/bin/_mocha -u tdd --reporter spec --timeout 15000 --slow 3000"
   },
   "devDependencies": {
-    "mocha": "1.0.x",
-    "lodash": "2.2.x"
+    "mocha": "1.0.x"
   },
   "optionalDependencies": {},
   "engines": {

@@ -1,7 +1,6 @@
 var fql = require('../index.js'),
 	assert = require('assert'),
-	querystring = require('querystring'),
-	_ = require('lodash');
+	querystring = require('querystring');
 
 suite('QueryMaker', function() {
 	suite('#parse', function() {
@@ -75,8 +74,8 @@ suite('QueryMaker', function() {
 				assert.ok(data);
 				assert.ok(data.coke);
 				assert.ok(data.facebook);
-				assert.ok(_(data).pluck('name'));
-				assert.ok(_(data).pluck('fan_count'));
+				assert.ok({'name': data['name']});
+				assert.ok({'fan_count': data['fan_count']});
 				done();
 			});
 		});
