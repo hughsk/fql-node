@@ -28,7 +28,8 @@ module.exports.QueryMaker = QueryMaker = function(options) {
  * @return {QueryMaker} Returns itself - #query is chainable.
  */
 QueryMaker.prototype.query = function(query, options, callback) {
-	var safe = true;
+	var safe = true,
+	    multi = (typeof query === 'object');
 
 	// `options` and `callback` are optional
 	if (typeof options === 'function') {
@@ -79,7 +80,7 @@ QueryMaker.prototype.query = function(query, options, callback) {
 			// Supports multi-query responses too...
 			data = data.data;
 
-			if (data.length === 1) {
+			if (!multi) {
 				data = data[0].fql_result_set;
 			} else {
 				_.each(data, function(result) {
