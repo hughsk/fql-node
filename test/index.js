@@ -1,7 +1,7 @@
 var fql = require('../index.js'),
 	assert = require('assert'),
 	querystring = require('querystring'),
-	_ = require('underscore');
+	_ = require('lodash');
 
 suite('QueryMaker', function() {
 	suite('#parse', function() {

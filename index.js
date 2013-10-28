@@ -3,7 +3,6 @@ var querystring = require('querystring'),
 	url = require('url'),
 	https = require('https'),
 	http = require('http'),
-	_ = require('underscore'),
 
 // Exported functions/classes
 	fql, QueryMaker;
@@ -16,7 +15,7 @@ module.exports.QueryMaker = QueryMaker = function(options) {
 	if (!(this instanceof QueryMaker)) {
 		return new QueryMaker();
 	}
-	this.options = _(options || {}).defaults({});
+	this.options = options || {};
 };
 
 /**
@@ -56,8 +55,7 @@ QueryMaker.prototype.query = function(query, options, callback) {
 			}
 
 			var data,
-				error = false,
-				newData = {};
+				error = false;
 			
 			// Catch any errors in the response
 			try {
@@ -82,10 +80,11 @@ QueryMaker.prototype.query = function(query, options, callback) {
 			if (data.length === 1) {
 				data = data[0].fql_result_set;
 			} else {
-				_.each(data, function(result) {
-					newData[result.name] = result.fql_result_set;
-				});
-				data = newData;
+				data = data.reduce(function(memo, result){
+					memo[result.name] = result.fql_result_set;
+
+					return memo;
+				}, {});
 			}
 
 			// One last check for falsey responses
