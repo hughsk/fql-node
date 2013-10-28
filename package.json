@@ -2,7 +2,7 @@
   "author": "Hugh Kennedy <hughskennedy@gmail.com> (http://hughskennedy.com)",
   "name": "fql",
   "description": "Simple Facebook FQL queries for Node",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "repository": {
     "type": "git",
     "url": "git@github.com:hughsk/fql-node.git"
