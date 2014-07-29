@@ -20,7 +20,7 @@ module.exports.QueryMaker = QueryMaker = function(options) {
 
 /**
  * Query the Facebook Graph API.
- * 
+ *
  * @param  {String|Object}   query    The query you want to pass to Facebook. Use a string for single queries, or an object for multiqueries.
  * @param  {Object}          options  Options to pass onto the query. Optional
  * @param  {Function}        callback Called on response (err, data)
@@ -57,7 +57,7 @@ QueryMaker.prototype.query = function(query, options, callback) {
 
 			var data,
 				error = false;
-			
+
 			// Catch any errors in the response
 			try {
 				data = JSON.parse(buffer);
@@ -73,6 +73,10 @@ QueryMaker.prototype.query = function(query, options, callback) {
 			if (error) {
 				return callback(error);
 			}
+
+      if (data.hasOwnProperty('error_code')) {
+        return callback(new Error(data.error_msg));
+      }
 
 			// Condenses response data
 			// Supports multi-query responses too...
@@ -107,7 +111,7 @@ QueryMaker.prototype.query = function(query, options, callback) {
 /**
  * Parses either a single query string or a JSON object
  * of queries (see http://developers.facebook.com/docs/reference/fql/)
- * 
+ *
  * @param  {String|Object} fqlQuery The query/queries to parse
  * @param  {Object} options         Additional options to pass, inherited from #query.
  * @return {String}                 The parsed querystring
@@ -141,13 +145,13 @@ QueryMaker.prototype.parse = function(fqlQuery, options) {
 // Allows not having to call fql() to use #query or #parse.
 fql.query = function(query, options, callback) {
 	var queryMaker = new QueryMaker();
-	
+
 	queryMaker.query(query, options, callback);
 
 	return queryMaker;
 };
 fql.parse = function(fqlQuery, options) {
 	var queryMaker = new QueryMaker();
-	
+
 	return queryMaker.parse(fqlQuery, options);
 };
