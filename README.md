@@ -1,5 +1,7 @@
 # node-fql
 
+**Deprecated: fql is deprecated!**
+
 Jump into the Facebook Graph API with simpler FQL queries for Node.
 
 ## Installation
